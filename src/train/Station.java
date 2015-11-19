@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 /**
  * Created by Marco Galassi (marco.galassi@unimore.it) on 18/11/15.
+ * This version does not provide FIFO-like queueing for waiting passengers.
+ * This version allows trains to drop off passengers even if a train is already in the station (like if there
+ * were 2 platforms, one for dropping off, and one for picking up)
  */
 public class Station {
 
