@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Marco Galassi (marco.galassi@unimore.it) on 23/11/15.
- * Credits to STUDENT1, STUDENT2 etc.
+ * Credits to students Alessandro Luppi, Simone Sganzerla.
  */
 public class Station {
 

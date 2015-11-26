@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Marco Galassi (marco.galassi@unimore.it) on 23/11/15.
+ * Credits to students Alessandro Luppi, Simone Sganzerla.
  */
 public class Train extends Thread {
 
