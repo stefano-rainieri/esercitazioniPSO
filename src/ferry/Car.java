@@ -10,7 +10,7 @@ public class Car extends Thread {
     private Ferry ferry; // ferry the car boards on
 
     public Car(String name, int weight, Dock departure, Dock arrival){
-        super(name);
+        super(name+"["+weight+"]");
         this.weight = weight;
         this.departure = departure;
         this.arrival = arrival;
@@ -30,7 +30,7 @@ public class Car extends Thread {
     }
 
     public void logln(String msg){
-        System.out.println(getName()+"["+getWeight()+"]: "+msg);
+        System.out.println(getName()+": "+msg);
     }
 
     public void run(){

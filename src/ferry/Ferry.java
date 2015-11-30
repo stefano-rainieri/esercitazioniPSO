@@ -34,7 +34,13 @@ public class Ferry extends Thread {
     }
 
     /**
-     * Returns a boolean value indicating if the car can board the ferry or not.
+     * Returns a boolean value indicating if the car can be boarded on the ferry or not. The result depends on the
+     * current number of cars currently boarded and the current total weight of currently boarded cars on the ferry and
+     * is calculated as:
+     * <pre>
+     * {@code
+     * return !isFull() && (getCurrentTotalWeight()+car.getWeight())<=weightLimit;
+     * }</pre>
      * @param car the car willing to board.
      * @return true if the car can board, false otherwise.
      */
@@ -76,13 +82,14 @@ public class Ferry extends Thread {
         return boardedCars.size()==carsLimit;
     }
 
-    public void printStatus(String dockName){
+    public void printStatus(Dock dock){
         synchronized (System.out){
-            System.out.println("----- Ferry: "+getName()+" - "+dockName+" -----");
+            System.out.println("----- Ferry: "+getName()+" - "+dock.getDockName()+" -----");
             System.out.println("curCars:\t"+boardedCars.size());
             System.out.println("carsLimit:\t"+carsLimit);
             System.out.println("curWeight:\t"+getCurrentTotalWeight());
             System.out.println("weigLimit:\t"+weightLimit);
+            dock.printStatus();
         }
     }
 
