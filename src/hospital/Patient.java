@@ -6,6 +6,7 @@ package hospital;
 public class Patient extends Thread {
 
     private EmergencyCode code;
+    private int queueingNumber;
     private Hospital hospital;
 
     public Patient(String name, Hospital hospital){
@@ -13,6 +14,7 @@ public class Patient extends Thread {
 
         this.hospital = hospital;
         code = null;
+        queueingNumber = -1;
     }
 
     public EmergencyCode getEmergencyCode(){
@@ -21,6 +23,20 @@ public class Patient extends Thread {
 
     public void setEmergencyCode(EmergencyCode code){
         this.code = code;
+    }
+
+    public int getQueueingNumber(){
+        return queueingNumber;
+    }
+
+    public void setQueueingNumber(int val){
+        this.queueingNumber = val;
+    }
+
+    public void logln(String msg){
+        synchronized (System.out){
+            System.out.println(getName()+"["+queueingNumber+"]"+"["+(code==null? "None": code)+"]: "+msg);
+        }
     }
 
     public void run(){
