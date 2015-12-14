@@ -2,20 +2,20 @@ package airfield;
 
 /**
  * Created by Marco Galassi (marco.galassi@unimore.it) on 10/12/15.
+ * Models different types of passengers: single passengers are modeled as groups with only one person, while groups
+ * have at least two people.
  */
-public class Passenger extends Thread {
+public class People extends Thread {
 
     private Airfield airfield;
-    private int queueNumber;
     private Helicopter helicopter;
+    private int numberOfPeople;
 
-
-    public Passenger(Airfield airfield, String name){
-        super(name);
-
+    public People(Airfield airfield, int id, int numberOfPeople){
+        super(numberOfPeople>1? "Group#"+id : "Passenger#"+id);
         this.airfield = airfield;
-        queueNumber = -1;
         helicopter = null;
+        this.numberOfPeople = numberOfPeople;
     }
 
     public Helicopter getHelicopter(){
@@ -26,16 +26,12 @@ public class Passenger extends Thread {
         this.helicopter = helicopter;
     }
 
-    public int getQueueNumber(){
-        return queueNumber;
-    }
-
-    public void setQueueNumber(int number){
-        this.queueNumber = number;
+    public int getNumberOfPeople(){
+        return numberOfPeople;
     }
 
     public void logln(String msg){
-        System.out.println(getName()+"["+getQueueNumber()+"]: "+msg);
+        System.out.println(getName()+"["+getNumberOfPeople()+"]: "+msg);
     }
 
 
