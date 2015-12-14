@@ -6,7 +6,6 @@ import java.util.ArrayList;
  * Created by Marco Galassi (marco.galassi@unimore.it) on 10/12/15.
  */
 public class Airfield {
-
     private String name; // name of the airfield
     private Helicopter currentHelicopter; // reference if the currentHelicopter is in the airfield waiting for passengers.
     private ArrayList<People> waitingPassengers; // waiting queue for single passengers
