@@ -1,0 +1,26 @@
+
+public class Medico extends Thread {
+  private boolean _occupato;//true se il medico sta visitando, false altrimenti
+  Medico(String name){
+	  super(name);
+	  _occupato=false;
+  }
+  public void log(String msg){
+	  System.out.println(this.getName()+" "+msg+"\n");
+  }
+  
+  public boolean getOccupato(){
+	  return _occupato;
+  }
+  
+  public void setOccupato(boolean o){
+	  _occupato=o;
+  }
+  
+  public void Visita(Paziente p) throws InterruptedException{
+		Thread.sleep((long) (Math.random()*200+20));
+	}
+  public void run(){
+	  while(true){}
+  }
+}

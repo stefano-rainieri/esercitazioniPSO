@@ -1,0 +1,115 @@
+import java.util.ArrayList;
+
+
+public class CentroMedico {
+	ArrayList<Paziente> _pazienti_base; // pazienti in coda per la visita del medico di base
+	ArrayList<Paziente> _pazienti_specialista; // pazienti in coda per la visita del medico specialista
+	Medico _medico_base;
+	Medico _medico_specialista;
+	CentroMedico(Medico base, Medico specialista){
+		_pazienti_base= new ArrayList<Paziente>();
+		_pazienti_specialista= new  ArrayList<Paziente>();
+		_medico_base=base;
+		_medico_specialista=specialista;
+	}
+	//azioni paziente
+	public void RiceviVisita(Paziente paziente) throws InterruptedException{
+		synchronized(_pazienti_base){
+			_pazienti_base.add(paziente); // paziente viene inserito in coda per la visita del medico di base
+			while(_pazienti_base.get(0)!=paziente){ //paziente attende funchè non è primo
+				paziente.log("wait per posizione visita medico di base");
+				_pazienti_base.wait();
+				//paziente.log("notify per posizione visita medico di base");
+
+			}
+		}
+		
+		//visita del medico di base
+		synchronized(_medico_base){
+			while( _medico_base.getOccupato()==true){ //attendi finchè il medico non si libera
+				paziente.log("wait per visita medico di base");
+				_medico_base.wait();
+				paziente.log("notify per visita medico di base");
+			}
+			_medico_base.setOccupato(true);
+		}
+		paziente.log("entro dal "+_medico_base.getName());
+		//elimino il paziente dalla coda
+		synchronized(_pazienti_base){
+			_pazienti_base.remove(paziente);
+			_pazienti_base.notifyAll();
+		}
+		//il medico esegue la visita
+		synchronized(_medico_base){
+			_medico_base.Visita(paziente);
+			_medico_base.setOccupato(false);
+			_medico_base.log("visita eseguita");
+			_medico_base.notifyAll();
+		}
+		//visita specialistica
+		if(paziente.getTipo()==true){
+			synchronized(_pazienti_specialista){
+				_pazienti_specialista.add(paziente); // paziente viene inserito in coda per la visita del medico di base
+				while(_pazienti_specialista.get(0)!=paziente){ //paziente attende funchè non è primo
+					paziente.log("wait per posizione visita medico specialista");
+					_pazienti_specialista.wait();
+					paziente.log("notify per posizione visita medico specialista");
+
+				}
+
+			}
+			//visita del medico di base
+			synchronized(_medico_specialista){
+				while( _medico_specialista.getOccupato()==true){ //attendi finchè il medico non si libera
+					paziente.log("wait per visita medico specialista");
+					_medico_specialista.wait();
+					paziente.log("notify per visita medico specialista");
+
+				}
+				_medico_specialista.setOccupato(true);
+
+			}
+			//elimino il paziente dalla coda
+			synchronized(_pazienti_specialista){
+				_pazienti_specialista.remove(paziente);
+				_pazienti_specialista.notifyAll();
+			}
+			//il medico esegue la visita
+			synchronized(_medico_specialista){
+				_medico_specialista.Visita(paziente);
+				_medico_specialista.setOccupato(false);
+				_medico_specialista.log("visita eseguita");
+				_medico_specialista.notifyAll();
+			}
+
+
+		}
+
+	}
+
+	public static void main(String[] args){
+
+		System.out.println("Inizio esame");
+		
+		Medico m_base= new Medico("Medico_Base");
+		m_base.start();
+		Medico m_spec= new Medico("Medico_Specialista");
+		m_spec.start();
+		CentroMedico centro= new  CentroMedico(m_base,m_spec);
+		ArrayList<Paziente> pazienti= new ArrayList<Paziente>() ;
+		for(int i=0;i<15;i++)
+			pazienti.add(new Paziente("paziente"+i,(Math.random()>0.5)?true:false,centro)); // tipo paziente assegnato in modo random
+		for(Paziente p:pazienti)
+			p.start();
+
+		// attendi finchè tutti i pazienti hanno completato la visita
+		try{
+			for(Paziente p: pazienti)
+				p.join();
+			Thread.sleep(1000);
+		}catch(InterruptedException e){
+			e.printStackTrace();
+		}
+		System.exit(0);
+	}
+}

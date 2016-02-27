@@ -1,0 +1,30 @@
+
+public class Paziente extends Thread{
+	
+	private boolean _tipo; // valore false per tipo p1 ,valore true  per tipo p2
+	private CentroMedico _centro;
+	
+	Paziente(String name,boolean tipo,CentroMedico centro){
+		super(name);
+		_tipo=tipo;
+		_centro=centro;
+	}
+	
+	public void log(String msg){
+		System.out.println(this.getName()+(_tipo?"p1":"p2")+": "+msg+"\n");
+	}
+	
+	public boolean getTipo(){
+		return _tipo;
+	}
+	
+	public void run(){
+		try {
+			_centro.RiceviVisita(this);
+			log("fine");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+}
